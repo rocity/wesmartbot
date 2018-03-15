@@ -2,7 +2,8 @@ import twitter
 from decouple import config
 
 
-def main():
+def execute_master_plan():
+    print('EXECUTING MASTER PLAN')
     api = twitter.Api(consumer_key=config('CONSUMER_KEY'),
                       consumer_secret=config('CONSUMER_SECRET'),
                       access_token_key=config('ACCESS_TOKEN'),
@@ -15,7 +16,8 @@ def main():
     tweets = api.GetSearch(raw_query='l=&q=%23{}'.format(hashtag))
 
     if tweets:
-        target = tweets[0]
+        target = tweets[-1]
+        print('TARGET ACQUIRED: TWEET ID {}'.format(target.id))
 
         params = {
             'status': status,
@@ -24,7 +26,4 @@ def main():
             'media': img_link
         }
         status = api.PostUpdate(**params)
-
-
-if __name__ == "__main__":
-    main()
+        print('TARGET DESTROYED: {}'.format(status.text))
